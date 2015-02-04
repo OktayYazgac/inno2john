@@ -98,7 +98,7 @@ sub DiskInfo {
 # IS 4.0.0 might still be using 2.0.8 semantics, needs verification
 sub ReadFile {
 	my ($self, $input, $header, $location, $offset1, $password, @slices) = @_;
-	
+
 	#print Dumper \@slices;
 	#print Dumper $header;
 	#print Dumper $location;
@@ -108,15 +108,15 @@ sub ReadFile {
 	#open(my $temp, '>', "/tmp/data.lzma2");
 	#print($temp $dump);
 	#undef($temp);
-	
+
 	# Note: once we support decryption, make sure the password is interpreted as UTF-16LE (why?)
 	if ($location->{Flags}->{ChunkEncrypted} || $location->{Flags}->{foChunkEncrypted}) {
 		!defined($password) && croak("File is encrypted, but no password was given");
 		croak("Encryption is not supported yet");
 	}
-	
+
 	my $buffer;
-	
+
 	if (@slices > 1) {
 		my $i = 0;
 		my $size = $location->{ChunkCompressedSize} + 4;
@@ -149,7 +149,7 @@ sub ReadFile {
 	} else {
 		$input->seek($offset1 + $location->{StartOffset}, Fcntl::SEEK_SET);
 	}
-	
+
 	$input->read($buffer, 4) || croak("Can't read compressed block magic: $!");
 	($buffer eq ZLIBID) || croak("Compressed block ID invalid");
 
@@ -176,12 +176,12 @@ sub ReadFile {
 	} else {
 		$reader = $input;
 	}
-	
+
 	#printf("Seeking to 0x%08x...\n", $location->{ChunkSuboffset});
 	$reader->seek($location->{ChunkSuboffset}, Fcntl::SEEK_CUR);
 	#print("Reading $location->{OriginalSize} bytes...\n");
 	($reader->read($buffer, $location->{OriginalSize}) >= $location->{OriginalSize}) || croak("Can't uncompress file: $!");
-	
+
 	if ($location->{Flags}->{CallInstructionOptimized} || $location->{Flags}->{foCallInstructionOptimized}) {
 		#print("Transforming binary file...\n");
 		# We could just transform the whole data, but this will expose a flaw in the original algorithm:
@@ -192,12 +192,12 @@ sub ReadFile {
 			substr($buffer, $offset, 0x10000) = $self->TransformCallInstructions(substr($buffer, $offset, 0x10000), $offset);
 		}
 	}
-	
+
 	#print hexdump($buffer);
-	
+
 	#print("Verifying checksum...\n");
 	($self->CheckFile($buffer, $location)) || croak("Invalid file checksum");
-	
+
 	return $buffer;
 }
 

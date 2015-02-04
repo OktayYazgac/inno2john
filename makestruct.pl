@@ -73,7 +73,7 @@ sub preprocess {
 
 sub generate {
 	my ($out, $data, @types) = @_;
-	
+
 	my $re = DelphiGrammar->R('::array', 'ParserGenerator');
 	$re->read(\$data) || die("Error parsing input: $$");
 	my $value = ${$re->value};

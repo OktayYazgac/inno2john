@@ -119,7 +119,7 @@ sub new {
 	$exe->{Input}->read($buffer, 24);
 	my $self = unpackbinary($buffer, '(LS2L3S2)<', 'Signature', 'Machine', 'NumberOfSections', 'TimeDateStamp', 'PointerToSymbolTable', 'NumberOfSymbols', 'SizeOfOptionalHeader', 'Characteristics');
 	($self->{Signature} == PeMagic) || die("Invalid PE magic");
-	
+
 	return bless($self, $class);
 }
 

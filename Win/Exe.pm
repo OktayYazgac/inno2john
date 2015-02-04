@@ -22,9 +22,9 @@ use overload (
 sub new {
 	my $class = shift;
 	my ($io) = @_;
-	
+
 	my $self = { };
-	
+
 	if (ref($io)) {
 		# interpret as IO object or glob
 		$self->{Input} = $io;
@@ -34,7 +34,7 @@ sub new {
 		$self->{Input} = IO::File->new($io, '<') || croak("Can't open $io");
 		$self->{Input}->binmode();
 	}
-	
+
 	return bless($self, $class);
 }
 

@@ -49,7 +49,7 @@ sub FieldReader {
 
 sub ReadFile {
 	my ($self, $input, $header, $location, $offset1, $password) = @_;
-	
+
 	$input->seek($offset1 + $location->{StartOffset}, Fcntl::SEEK_SET);
 
 	my $reader;
@@ -69,11 +69,11 @@ sub ReadFile {
 	} else {
 		$reader = $input;
 	}
-	
+
 	($reader->read(my $buffer, $location->{OriginalSize}) >= $location->{OriginalSize}) || die("Can't uncompress file");
-	
+
 	($self->CheckFile($buffer, $location)) || die("Invalid file checksum");
-	
+
 	return $buffer;
 }
 

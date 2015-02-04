@@ -78,7 +78,7 @@ sub new {
 			$self->{DataDirectory}->{$Keys[$i]} = unpackbinary($buffer, '(L2)<', 'VirtualAddress', 'Size');
 		}
 	}
-	
+
 	return bless($self, $class);
 }
 

@@ -187,8 +187,8 @@ sub ReadEnum {
 }
 
 =comment
- Type  Storage size                        Range            
- 
+ Type  Storage size                        Range
+
  Byte       1                             0 to 255
  ShortInt   1                          -127 to 127
  Word       2                             0 to 65,535
@@ -198,15 +198,15 @@ sub ReadEnum {
  LongInt    4                -2,147,483,648 to 2,147,483,647
  Integer    4*               -2,147,483,648 to 2,147,483,647
  Int64      8    -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
- 
+
  Single     4     7  significant digits, exponent   -38 to +38
  Currency   8    50+ significant digits, fixed 4 decimal places
  Double     8    15  significant digits, exponent  -308 to +308
  Extended  10    19  significant digits, exponent -4932 to +4932
- 
+
  * Note : the Integer and Cardinal types are both 4 bytes in size at present (Delphi release 7), but are not guaranteed to be this size in the future. All other type sizes are guaranteed.
 =cut
- 
+
 sub ReadByteArray {
 	my ($self, $length) = @_;
 	warn("Reading $length bytes") if $self->{Debug};

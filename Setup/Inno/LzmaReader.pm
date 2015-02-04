@@ -34,7 +34,7 @@ sub new {
 	} else {
 		$transform = '';
 	}
-	
+
 	# Create temporary file and consume data
 	# Note that automatic file removal is disabled as this can cause problems (early deletion etc.)
 	my $temp = File::Temp->new(UNLINK => 0) || croak("Can't create temp file");
@@ -58,7 +58,7 @@ sub new {
 	}
 	my $tempfile = $temp->filename();
 	#$temp->close();
-	
+
 	# Spawn subprocess for decompression
 	my $self = $class->SUPER::new("xz --stdout --decompress --format=raw --lzma1=lc=$lc,lp=$lp,pb=$pb,dict=$dictsize $transform $tempfile |") || croak("Can't open decompressor");
 
@@ -107,7 +107,7 @@ sub new {
 	} else {
 		$transform = '';
 	}
-	
+
 	# Read all data into memory
 	my $data;
 	if (defined($size)) {
@@ -123,7 +123,7 @@ sub new {
 			$data .= $buffer;
 		}
 	}
-	
+
 	# Spawn a subprocess to feed the data to xz
 	my $pid = open(my $pipe, "-|");
 	if (!defined($pid)) {
@@ -143,10 +143,10 @@ sub new {
 				exit(5);
 			}
 		}
-		
+
 		# Write the whole buffer into the pipe
 		$funnel->write($data);
-		
+
 		# Close and wait for completion
 		$funnel->close();
 		waitpid($uncomppid, 0) if defined($uncomppid);

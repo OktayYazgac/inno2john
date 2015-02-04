@@ -13,7 +13,7 @@ sub open {
 
 	$handle->seek($offset, Fcntl::SEEK_SET) if defined($offset);
 	$blocksize = 4096 unless defined $blocksize;
-	
+
 	$handle->read(my $buffer, 9) || croak("Can't read compression header");
 	my ($headercrc, $storedsize, $compressed) = unpack('(L2c)<', $buffer);
 	my $crc = Digest->new('CRC-32');
@@ -21,9 +21,9 @@ sub open {
 	my $digest = $crc->digest;
 	#print(STDERR "Header CRC: file=$headercrc calculated=$digest\n");
 	($digest == $headercrc) || croak("Invalid CRC in compression header");
-	
+
 	$handle->read(my $indata, $storedsize);
-	
+
 	my $framesize = $blocksize + 4;
 	my $base = $handle->tell;
 	my %fields = (
@@ -36,7 +36,7 @@ sub open {
 		Crc => $crc->new,
 	);
 	@{*$self}{keys %fields} = values %fields;
-	
+
 	my $pid = open(my $pipe, "-|");
 	if (!defined($pid)) {
 		croak("Can't fork streamer");
